@@ -35,65 +35,8 @@ if (!window._flutter) {
 }
 _flutter.buildConfig = {"engineRevision":"e4b8dca3f1b4ede4c30371002441c88c12187ed6","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
 
-
-const loading = document.createElement("main");
-loading.setAttribute("role", "status");
-loading.setAttribute("aria-live", "polite");
-Object.assign(loading.style, {
-  minHeight: "100vh",
-  display: "grid",
-  placeItems: "center",
-  padding: "24px",
-  boxSizing: "border-box",
-  background: "#f5f7fa",
-  color: "#0a2342",
-  fontFamily: "Arial, sans-serif",
-  textAlign: "center",
+_flutter.loader.load({
+  serviceWorkerSettings: {
+    serviceWorkerVersion: "1817125667" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */
+  }
 });
-
-const panel = document.createElement("div");
-const title = document.createElement("strong");
-const details = document.createElement("p");
-title.textContent = "Abrindo o Excelenc.IA…";
-details.textContent = "Carregando a aplicação no navegador";
-Object.assign(title.style, { display: "block", fontSize: "20px" });
-Object.assign(details.style, { margin: "10px 0 0", color: "#59636f" });
-panel.append(title, details);
-loading.append(panel);
-document.body.append(loading);
-
-function showStartupFailure(error) {
-  title.textContent = "Não foi possível abrir o Excelenc.IA";
-  details.textContent = String(error || "Falha desconhecida ao iniciar a aplicação.");
-  const retry = document.createElement("button");
-  retry.type = "button";
-  retry.textContent = "Tentar novamente";
-  Object.assign(retry.style, {
-    marginTop: "16px",
-    padding: "10px 18px",
-    border: "0",
-    borderRadius: "10px",
-    background: "#0a2342",
-    color: "white",
-    cursor: "pointer",
-    fontWeight: "700",
-  });
-  retry.addEventListener("click", () => window.location.reload());
-  panel.append(retry);
-}
-
-Promise.resolve(
-  _flutter.loader.load({
-    onEntrypointLoaded: async function onEntrypointLoaded(engineInitializer) {
-      try {
-        details.textContent = "Inicializando a interface…";
-        const appRunner = await engineInitializer.initializeEngine();
-        details.textContent = "Preparando a conversão…";
-        await appRunner.runApp();
-        loading.remove();
-      } catch (error) {
-        showStartupFailure(error);
-      }
-    },
-  }),
-).catch(showStartupFailure);
